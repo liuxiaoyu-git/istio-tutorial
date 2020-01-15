@@ -2,6 +2,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 audit.log
 .cache/
+*.log
 
 docs/
 gh-pages/
@@ -32,4 +33,13 @@ nbdist/
 
 .DS_Store
 .vscode
+istio-1.1.1
+firebase*
+yarn*
+package*
+node_modules
+.firebaserc
+.firebase
 
+customer/dotnet/obj
+preference/dotnet/obj

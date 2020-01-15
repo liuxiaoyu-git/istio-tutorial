@@ -6,7 +6,7 @@ if [ -z "$namespace" ]; then
     namespace="tutorial"
 fi
 
-contentvs=`istioctl get virtualservice -n "$namespace" 2>/dev/null` 
+contentvs=`kubectl get virtualservice -n "$namespace" 2>/dev/null` 
 
 if [ -z "$contentvs" ]; then
     echo "No Virtual Services in $namespace namespace."
@@ -15,14 +15,16 @@ else
 
     names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentvs"`
 
-    for name in "${names[@]}"
+    for name in ${names[@]}
     do
-        istioctl delete virtualservice "$name" -n "$namespace"
+        if [ "$name" != "customer-gateway" ]; then
+            kubectl delete virtualservice "$name" -n "$namespace"
+        fi
     done
     
 fi
 
-contentdr=`istioctl get destinationrule -n "$namespace" 2>/dev/null`
+contentdr=`kubectl get destinationrule -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentdr" ]; then
     echo "No Destination Rule in $namespace namespace."
@@ -31,14 +33,14 @@ else
 
     names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentdr"`
 
-    for name in "${names[@]}"
+    for name in ${names[@]}
     do
-        istioctl delete destinationrule "$name" -n "$namespace"
+        kubectl delete destinationrule "$name" -n "$namespace"
     done
     
 fi
 
-contentse=`istioctl get serviceentry -n "$namespace" 2>/dev/null`
+contentse=`kubectl get serviceentry -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentse" ]; then
     echo "No Service Entry in $namespace namespace."
@@ -47,30 +49,14 @@ else
 
     names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentse"`
 
-    for name in "${names[@]}"
+    for name in ${names[@]}
     do
-        istioctl delete serviceentry "$name" -n "$namespace"
+        kubectl delete serviceentry "$name" -n "$namespace"
     done
     
 fi
 
-contentgw=`istioctl get gateway -n "$namespace" 2>/dev/null`
-
-if [ -z "$contentgw" ]; then
-    echo "No Gateway in $namespace namespace."
-else
-    contentgw=`awk 'NR>1' <<< "$contentgw"`
-
-    names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentgw"`
-
-    for name in "${names[@]}"
-    do
-        istioctl delete gateway "$name" -n "$namespace"
-    done
-    
-fi
-
-contentp=`istioctl get policy -n "$namespace" 2>/dev/null`
+contentp=`kubectl get policy -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentp" ]; then
     echo "No Policy in $namespace namespace."
@@ -79,14 +65,14 @@ else
 
     names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentp"`
 
-    for name in "${names[@]}"
+    for name in ${names[@]}
     do
-        istioctl delete policy "$name" -n "$namespace"
+        kubectl delete policy "$name" -n "$namespace"
     done
     
 fi
 
-contentsr=`istioctl get servicerole -n "$namespace" 2>/dev/null`
+contentsr=`kubectl get servicerole -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentsr" ]; then
     echo "No ServiceRole in $namespace namespace."
@@ -95,14 +81,14 @@ else
 
     names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentsr"`
 
-    for name in "${names[@]}"
+    for name in ${names[@]}
     do
-        istioctl delete servicerole "$name" -n "$namespace"
+        kubectl delete servicerole "$name" -n "$namespace"
     done
     
 fi
 
-contentsrb=`istioctl get servicerolebinding -n "$namespace" 2>/dev/null`
+contentsrb=`kubectl get servicerolebinding -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentsrb" ]; then
     echo "No ServiceRoleBinding in $namespace namespace."
@@ -111,14 +97,14 @@ else
 
     names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentsrb"`
 
-    for name in "${names[@]}"
+    for name in ${names[@]}
     do
-        istioctl delete servicerolebinding "$name" -n "$namespace"
+        kubectl delete servicerolebinding "$name" -n "$namespace"
     done
     
 fi
 
-contentrbc=`istioctl get rbacconfig -n "$namespace" 2>/dev/null`
+contentrbc=`kubectl get rbacconfig -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentrbc" ]; then
     echo "No RbacConfig in $namespace namespace."
@@ -127,9 +113,25 @@ else
 
     names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentrbc"`
 
-    for name in "${names[@]}"
+    for name in ${names[@]}
     do
-        istioctl delete rbacconfig "$name" -n "$namespace"
+        kubectl delete rbacconfig "$name" -n "$namespace"
+    done
+    
+fi
+
+contentcrbc=`kubectl get ClusterRbacConfig -n "$namespace" 2>/dev/null`
+
+if [ -z "$contentcrbc" ]; then
+    echo "No ClusterRbacConfig in $namespace namespace."
+else
+    contentcrbc=`awk 'NR>1' <<< "$contentcrbc"`
+
+    names=`awk -v namespace="$namespace" '{ {print $1} }' <<< "$contentcrbc"`
+
+    for name in ${names[@]}
+    do
+        kubectl delete ClusterRbacConfig "$name" -n "$namespace"
     done
     
 fi

@@ -8,6 +8,7 @@ Create an environment variable for your user and log into OpenShift.
 ----
 export WORKSHOP_USER=<your-username-number>
 
+
 #Example:
 export WORKSHOP_USER=1
 
@@ -20,7 +21,7 @@ oc login -u user$WORKSHOP_USER -p openshift {ocpurl}
 
 Make sure you are logged in
 
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 oc whoami
 or
@@ -43,7 +44,7 @@ endif::workshop[]
 
 Then clone the git repository
 
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 git clone https://github.com/redhat-developer-demos/istio-tutorial
 cd istio-tutorial
@@ -53,15 +54,11 @@ Start deploying the microservice projects, starting with customer
 
 Make sure `istioctl` is in your `PATH`:
 
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 $ istioctl version
-Version: 1.0.5
-GitRevision: c1707e45e71c75d74bf3a5dec8c7086f32f32fad
-User: root@6f6ea1061f2b
-Hub: docker.io/istio
-GolangVersion: go1.10.4
-BuildStatus: Clean
+client version: 1.3.0
+control plane version: 1.3.0
 ----
 
 === Deploy Customer deploy using existing images
@@ -110,7 +107,7 @@ curl http://customer-tutorial{namespace-suffix}.{appdomain}
 You should see the following error because the services `preference` and `recommendation` are not yet deployed.
 
 ----
-customer => I/O error on GET request for "http://preference:8080": preference; nested exception is java.net.UnknownHostException: preference
+customer => UnknownHostException: preference
 ----
 
 
@@ -149,11 +146,9 @@ curl http://customer-tutorial{namespace-suffix}.{appdomain}
 
 It will respond with an error since the service `recommendation` is not yet deployed.
 
-NOTE: We could make this a bit more resilient in a future iteration of this tutorial
-
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
-customer => 503 preference => I/O error on GET request for "http://recommendation:8080": recommendation; nested exception is java.net.UnknownHostException: recommendation
+customer => Error: 503 - preference => UnknownHostException: recommendation
 ----
 
 [#deployrecommendation]
@@ -167,7 +162,7 @@ oc apply -f <(istioctl kube-inject -f link:{github-repo}/{recommendation-repo}/k
 oc create -f link:{github-repo}/{recommendation-repo}/kubernetes/Service.yml[{recommendation-repo}/kubernetes/Service.yml] -n tutorial{namespace-suffix}
 oc get pods -w
 
-or 
+or
 
 kubectl apply -f <(istioctl kube-inject -f link:{github-repo}/{recommendation-repo}/kubernetes/Deployment.remote.yml[{recommendation-repo}/kubernetes/Deployment.remote.yml]) -n tutorial{namespace-suffix}
 kubectl create -f link:{github-repo}/{recommendation-repo}/kubernetes/Service.yml[{recommendation-repo}/kubernetes/Service.yml] -n tutorial{namespace-suffix}
@@ -185,7 +180,7 @@ curl http://customer-tutorial{namespace-suffix}.{appdomain}
 
 it should now return
 
-[source,bash]
+[source,bash,subs="+macros,+attributes"]
 ----
 customer => preference => recommendation v1 from '99634814-sf4cl': 1
 ----

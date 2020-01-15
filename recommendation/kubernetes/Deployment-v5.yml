@@ -16,6 +16,10 @@ spec:
       labels:
         app: recommendation
         version: v5
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/scheme: "http"
     spec:
       containers:
       - env:
@@ -27,7 +31,7 @@ spec:
           exec:
             command:
             - curl
-            - localhost:8080/health
+            - localhost:8080/health/live
           initialDelaySeconds: 20
           periodSeconds: 5
           timeoutSeconds: 10
@@ -46,7 +50,7 @@ spec:
           exec:
             command:
             - curl
-            - localhost:8080/health
+            - localhost:8080/health/ready
           initialDelaySeconds: 10
           periodSeconds: 5
           timeoutSeconds: 10
