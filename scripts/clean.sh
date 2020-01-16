@@ -6,7 +6,7 @@ if [ -z "$namespace" ]; then
     namespace="tutorial"
 fi
 
-contentvs=`kubectl get virtualservice -n "$namespace" 2>/dev/null` 
+contentvs=`oc get virtualservice -n "$namespace" 2>/dev/null` 
 
 if [ -z "$contentvs" ]; then
     echo "No Virtual Services in $namespace namespace."
@@ -18,13 +18,13 @@ else
     for name in ${names[@]}
     do
         if [ "$name" != "customer-gateway" ]; then
-            kubectl delete virtualservice "$name" -n "$namespace"
+            oc delete virtualservice "$name" -n "$namespace"
         fi
     done
     
 fi
 
-contentdr=`kubectl get destinationrule -n "$namespace" 2>/dev/null`
+contentdr=`oc get destinationrule -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentdr" ]; then
     echo "No Destination Rule in $namespace namespace."
@@ -35,12 +35,12 @@ else
 
     for name in ${names[@]}
     do
-        kubectl delete destinationrule "$name" -n "$namespace"
+        oc delete destinationrule "$name" -n "$namespace"
     done
     
 fi
 
-contentse=`kubectl get serviceentry -n "$namespace" 2>/dev/null`
+contentse=`oc get serviceentry -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentse" ]; then
     echo "No Service Entry in $namespace namespace."
@@ -51,12 +51,12 @@ else
 
     for name in ${names[@]}
     do
-        kubectl delete serviceentry "$name" -n "$namespace"
+        oc delete serviceentry "$name" -n "$namespace"
     done
     
 fi
 
-contentp=`kubectl get policy -n "$namespace" 2>/dev/null`
+contentp=`oc get policy -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentp" ]; then
     echo "No Policy in $namespace namespace."
@@ -67,12 +67,12 @@ else
 
     for name in ${names[@]}
     do
-        kubectl delete policy "$name" -n "$namespace"
+        oc delete policy "$name" -n "$namespace"
     done
     
 fi
 
-contentsr=`kubectl get servicerole -n "$namespace" 2>/dev/null`
+contentsr=`oc get servicerole -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentsr" ]; then
     echo "No ServiceRole in $namespace namespace."
@@ -83,12 +83,12 @@ else
 
     for name in ${names[@]}
     do
-        kubectl delete servicerole "$name" -n "$namespace"
+        oc delete servicerole "$name" -n "$namespace"
     done
     
 fi
 
-contentsrb=`kubectl get servicerolebinding -n "$namespace" 2>/dev/null`
+contentsrb=`oc get servicerolebinding -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentsrb" ]; then
     echo "No ServiceRoleBinding in $namespace namespace."
@@ -99,12 +99,12 @@ else
 
     for name in ${names[@]}
     do
-        kubectl delete servicerolebinding "$name" -n "$namespace"
+        oc delete servicerolebinding "$name" -n "$namespace"
     done
     
 fi
 
-contentrbc=`kubectl get rbacconfig -n "$namespace" 2>/dev/null`
+contentrbc=`oc get rbacconfig -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentrbc" ]; then
     echo "No RbacConfig in $namespace namespace."
@@ -115,12 +115,12 @@ else
 
     for name in ${names[@]}
     do
-        kubectl delete rbacconfig "$name" -n "$namespace"
+        oc delete rbacconfig "$name" -n "$namespace"
     done
     
 fi
 
-contentcrbc=`kubectl get ClusterRbacConfig -n "$namespace" 2>/dev/null`
+contentcrbc=`oc get ClusterRbacConfig -n "$namespace" 2>/dev/null`
 
 if [ -z "$contentcrbc" ]; then
     echo "No ClusterRbacConfig in $namespace namespace."
@@ -131,7 +131,7 @@ else
 
     for name in ${names[@]}
     do
-        kubectl delete ClusterRbacConfig "$name" -n "$namespace"
+        oc delete ClusterRbacConfig "$name" -n "$namespace"
     done
     
 fi
