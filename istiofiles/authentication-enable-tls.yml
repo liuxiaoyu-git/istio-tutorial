@@ -6,4 +6,5 @@ spec:
   targets:
   - name: preference
   peers:
-  - mtls: {}
+  - mtls:
+      mode: STRICT
